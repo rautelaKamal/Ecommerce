@@ -34,3 +34,43 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+---
+
+## Database (Neon + Drizzle ORM)
+
+This project is wired to use Neon PostgreSQL with Drizzle ORM.
+
+### 1) Configure environment
+
+Copy `env.example` to `.env.local` and fill in your Neon connection string (ensure `sslmode=require`).
+
+```
+cp env.example .env.local
+# edit .env.local and set NEON_DATABASE_URL
+```
+
+### 2) Generate and push schema
+
+Drizzle will read schema from `src/db/schema.ts` and generate migrations into `drizzle/`.
+
+```
+npm run db:generate
+npm run db:push
+```
+
+### 3) Seed sample products
+
+The seed script inserts a few Nike products. It clears the `products` table first (dev-only convenience).
+
+```
+npm run seed
+```
+
+### 4) Run the app
+
+```
+npm run dev
+```
+
+Open http://localhost:3000 to view the product list. If you see "No products found", verify your `.env.local` and re-run the seed script.

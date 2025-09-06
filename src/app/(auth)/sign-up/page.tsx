@@ -1,5 +1,6 @@
 import AuthForm from "@/components/AuthForm";
+import {signUp} from "@/lib/auth/actions";
 
-export default function SignUpPage() {
-  return <AuthForm type="sign-up" />;
+export default function Page() {
+  return <AuthForm mode="sign-up" onSubmit={signUp} />;
 }

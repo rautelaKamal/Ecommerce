@@ -1,47 +1,58 @@
- import "dotenv/config";
- import { getDb, schema } from "@/db/client";
+import dotenv from 'dotenv';
+import path from 'path';
 
-async function main() {
-  const db = getDb();
+// Load environment variables from .env.local
+const envPath = path.resolve(process.cwd(), '.env.local');
+dotenv.config({ path: envPath });
 
-  // Optional: clear existing products for idempotent seeding in dev
-  // Caution: this deletes all products
-  await db.delete(schema.products);
+// Debug: Check if env vars are loaded
+console.log('Environment variables:', {
+  envPath,
+  NEON_DATABASE_URL: process.env.NEON_DATABASE_URL ? '***REDACTED***' : 'NOT FOUND',
+  NODE_ENV: process.env.NODE_ENV || 'development'
+});
 
-  const items = [
-    {
-      name: "Nike Air Force 1 '07",
-      brand: "Nike",
-      imageUrl: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=1200&q=80&auto=format&fit=crop",
-      priceCents: 9999,
-    },
-    {
-      name: "Nike Air Max 270",
-      brand: "Nike",
-      imageUrl: "https://images.unsplash.com/photo-1519741497674-611481863552?w=1200&q=80&auto=format&fit=crop",
-      priceCents: 12999,
-    },
-    {
-      name: "Nike React Infinity Run",
-      brand: "Nike",
-      imageUrl: "https://images.unsplash.com/photo-1543508282-6319a3e2621f?w=1200&q=80&auto=format&fit=crop",
-      priceCents: 14999,
-    },
-    {
-      name: "Nike Dunk Low",
-      brand: "Nike",
-      imageUrl: "https://images.unsplash.com/photo-1605348532760-6753d2c43329?w=1200&q=80&auto=format&fit=crop",
-      priceCents: 10999,
-    },
-  ];
+import { getDb } from '../db/client';
+import { products } from '../db/schema';
+import { eq } from 'drizzle-orm';
 
-  await db.insert(schema.products).values(items);
+const db = getDb();
 
-  const count = (await db.select({ id: schema.products.id }).from(schema.products)).length;
-  console.log(`Seeded products: ${count}`);
+const log = (...args: unknown[]) => console.log('[seed]', ...args);
+const err = (...args: unknown[]) => console.error('[seed:error]', ...args);
+
+async function seed() {
+  try {
+    log('Seeding products...');
+
+    const productData = [
+      { name: 'Nike Air Max 1', brand: 'Nike', imageUrl: '/shoes/shoe-1.jpg', priceCents: 12999 },
+      { name: 'Nike Air Max 90', brand: 'Nike', imageUrl: '/shoes/shoe-2.webp', priceCents: 14999 },
+      { name: 'Nike Air Max 95', brand: 'Nike', imageUrl: '/shoes/shoe-3.webp', priceCents: 15999 },
+      { name: 'Nike Air Max 97', brand: 'Nike', imageUrl: '/shoes/shoe-4.webp', priceCents: 16999 },
+      { name: 'Nike Air Max 270', brand: 'Nike', imageUrl: '/shoes/shoe-5.avif', priceCents: 17999 },
+    ];
+
+    for (const product of productData) {
+      const existing = await db
+        .select()
+        .from(products)
+        .where(eq(products.name, product.name))
+        .limit(1);
+      
+      if (existing.length === 0) {
+        await db.insert(products).values(product);
+        log(`Added product: ${product.name}`);
+      } else {
+        log(`Skipping existing product: ${product.name}`);
+      }
+    }
+
+    log('Seeding complete!');
+  } catch (e) {
+    err('Error seeding database:', e);
+    process.exit(1);
+  }
 }
 
-main().catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+seed();

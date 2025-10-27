@@ -9,17 +9,17 @@ export * from './addresses';
 export * from './guest';
 
 // Product related schemas
-export { products, productsRelations } from './products';
+export { products, productsRelations, insertProductSchema, selectProductSchema } from './products';
 export { productVariants, productVariantsRelations } from './product-variants';
-export { productImages, productImagesRelations } from './images';
-export { categories, categoriesRelations } from './categories';
-export { collections, collectionsRelations } from './collections';
-export { brands, brandsRelations } from './brands';
+export { productImages, productImagesRelations, insertProductImageSchema, selectProductImageSchema } from './images';
+export { categories, categoriesRelations, insertCategorySchema, selectCategorySchema } from './categories';
+export { collections, collectionsRelations, insertCollectionSchema, selectCollectionSchema } from './collections';
+export { brands, brandsRelations, insertBrandSchema, selectBrandSchema } from './brands';
 
 // Filter schemas
-export { genders, gendersRelations } from './filters/genders';
-export { sizes, sizesRelations } from './filters/sizes';
-export { colors, colorsRelations } from './filters/colors';
+export { genders, gendersRelations, insertGenderSchema, selectGenderSchema } from './filters/genders';
+export { sizes, sizesRelations, insertSizeSchema, selectSizeSchema } from './filters/sizes';
+export { colors, colorsRelations, insertColorSchema, selectColorSchema } from './filters/colors';
 
 // E-commerce schemas
 export { carts, cartsRelations } from './carts';
@@ -37,12 +37,16 @@ export { productCollections, productCollectionsRelations } from './product-colle
 // Re-export types
 export type { InsertProduct, SelectProduct } from './products';
 export type { NewProductVariant as InsertVariant, ProductVariant as SelectVariant } from './product-variants';
+export type { NewProductVariant as InsertProductVariant } from './product-variants';
 export type { InsertProductImage, SelectProductImage } from './images';
 export type { SelectGender } from './filters/genders';
 export type { SelectColor } from './filters/colors';
 export type { SelectSize } from './filters/sizes';
 export type { InsertCategory, SelectCategory } from './categories';
 export type { InsertCollection, SelectCollection } from './collections';
+
+// Zod schemas for variants
+export { insertVariantSchema, selectVariantSchema } from './product-variants';
 
 // Enums and types
 export * from './enums';

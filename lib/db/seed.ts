@@ -2,6 +2,9 @@ import { db } from '@/lib/db';
 import {
   genders, colors, sizes, brands, categories, collections, productCollections,
   products, productVariants, productImages,
+  insertGenderSchema, insertColorSchema, insertSizeSchema,
+  insertBrandSchema, insertCategorySchema, insertCollectionSchema,
+  insertProductSchema, insertVariantSchema, insertProductImageSchema,
   type InsertBrand, type InsertCategory, type InsertCollection,
   type InsertProduct, type InsertProductVariant, type InsertProductImage,
 } from '@/lib/db/schema';

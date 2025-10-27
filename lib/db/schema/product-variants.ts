@@ -4,6 +4,7 @@ import { baseSchema } from './enums';
 import { products } from './products';
 import { colors } from './filters/colors';
 import { sizes } from './filters/sizes';
+import { z } from 'zod';
 
 // Product Variants table
 export const productVariants = pgTable('product_variants', {
@@ -17,6 +18,25 @@ export const productVariants = pgTable('product_variants', {
   inStock: integer('in_stock').default(0).notNull(),
   weight: numeric('weight', { precision: 10, scale: 2 }),
   dimensions: jsonb('dimensions').$type<{ length: number; width: number; height: number }>(),
+});
+
+export const insertVariantSchema = z.object({
+  productId: z.string().uuid(),
+  sku: z.string().min(1),
+  price: z.union([z.number(), z.string()]),
+  salePrice: z.union([z.number(), z.string()]).optional().nullable(),
+  colorId: z.string().uuid().optional().nullable(),
+  sizeId: z.string().uuid().optional().nullable(),
+  inStock: z.number().int().nonnegative().optional(),
+  weight: z.number().optional(),
+  dimensions: z
+    .object({ length: z.number(), width: z.number(), height: z.number() })
+    .optional(),
+  createdAt: z.date().optional(),
+  updatedAt: z.date().optional(),
+});
+export const selectVariantSchema = insertVariantSchema.extend({
+  id: z.string().uuid(),
 });
 
 // Types

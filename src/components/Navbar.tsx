@@ -9,11 +9,11 @@ interface NavbarProps {
 }
 
 const navItems = [
-  { label: "Men", href: "#" },
-  { label: "Women", href: "#" },
-  { label: "Kids", href: "#" },
-  { label: "Collections", href: "#" },
-  { label: "Contact", href: "#" },
+  { label: "Men", href: "/products?gender=men" },
+  { label: "Women", href: "/products?gender=women" },
+  { label: "Kids", href: "/products?gender=unisex" },
+  { label: "Collections", href: "/products" },
+  { label: "Contact", href: "/#contact" },
 ];
 
 export default function Navbar({ cartCount = 0 }: NavbarProps) {
@@ -23,7 +23,7 @@ export default function Navbar({ cartCount = 0 }: NavbarProps) {
     <header className="sticky top-0 z-50 w-full bg-[var(--color-light-100)] text-[var(--color-dark-900)] shadow-sm">
       <nav className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8" aria-label="Primary">
         {/* Logo */}
-        <Link href="#" className="flex items-center gap-2" aria-label="Home">
+        <Link href="/" className="flex items-center gap-2" aria-label="Home">
           <Image src="/logo-black.svg" alt="Brand" width={32} height={32} priority />
         </Link>
 

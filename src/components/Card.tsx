@@ -35,7 +35,11 @@ export default function Card({
   className = "",
 }: CardProps) {
   const displayPrice =
-    price === undefined ? undefined : typeof price === "number" ? `$${price.toFixed(2)}` : price;
+    price === undefined
+      ? undefined
+      : typeof price === "number"
+      ? new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 }).format(price)
+      : price;
   const content = (
     <article
       className={`group rounded-xl bg-light-100 ring-1 ring-light-300 transition-colors hover:ring-dark-500 ${className}`}
